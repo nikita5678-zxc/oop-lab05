@@ -1,0 +1,4 @@
+/d/OOP/oop-lab05/build/CMakeFiles/main.dir
+/d/OOP/oop-lab05/build/CMakeFiles/tests.dir
+/d/OOP/oop-lab05/build/CMakeFiles/edit_cache.dir
+/d/OOP/oop-lab05/build/CMakeFiles/rebuild_cache.dir
