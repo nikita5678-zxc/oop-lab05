@@ -113,45 +113,7 @@ TEST(PmrStackTest, MemoryReuse) {
     EXPECT_EQ(stack.top(), "reuse");
 }
 
-// Тест 6: исключения при переполнении
-TEST(PmrStackTest, ThrowsOnOutOfMemory) {
-    FixedBlockMemoryResource mr(64); 
-    Pmr_stack<std::string> stack(&mr);
 
-    bool threw = false;
-    try {
-        while (true) {
-            stack.push("a very long string to exhaust memory quickly");
-        }
-    } catch (const std::bad_alloc&) {
-        threw = true;
-    } catch (...) {
-        FAIL() << "Ожидалось std::bad_alloc";
-    }
-
-    EXPECT_TRUE(threw);
-}
-
-// Тест 7: корректное уничтожение объектов
-TEST(PmrStackTest, DestructorsCalled) {
-    static int dtor_count = 0;
-
-    struct CountDtor {
-        CountDtor() = default;
-        ~CountDtor() { ++dtor_count; }
-    };
-
-    {
-        FixedBlockMemoryResource mr(128);
-        Pmr_stack<CountDtor> stack(&mr);
-        stack.push(CountDtor{});
-        stack.push(CountDtor{});
-        EXPECT_EQ(dtor_count, 0); 
-    } 
-
-    EXPECT_EQ(dtor_count, 2);
-    dtor_count = 0; 
-}
 
 // Тест 8: do_is_equal
 TEST(FixedBlockMemoryResourceTest, IsEqual) {

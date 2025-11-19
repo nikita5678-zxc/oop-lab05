@@ -24,5 +24,5 @@ private:
 
     char *buffer;
     size_t size;
-    std::pmr::list<AllocationInfo> free_blocks;
+    std::list<AllocationInfo> free_blocks;
 };

@@ -6,7 +6,7 @@
 FixedBlockMemoryResource::FixedBlockMemoryResource(std::size_t size)
     : buffer(static_cast<char*>(std::malloc(size)))
     , size(size)
-    , free_blocks(this)
+    , free_blocks()
 {
     if (!buffer) {
         throw std::bad_alloc{};
