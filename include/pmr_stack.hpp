@@ -92,7 +92,7 @@ public:
 
     ~Pmr_stack() {
         for (size_t i = 0; i < size_; ++i) {
-            std::destroy_at(&data_[i]);
+            alloc_.destroy(&data_[i]);
         }
         if (data_) {
             alloc_.deallocate(data_, capacity_);
@@ -103,7 +103,7 @@ public:
         if (size_ >= capacity_) {
             grow();
         }
-        std::construct_at(&data_[size_], value);
+        alloc_.construct(&data_[size_], value);
         ++size_;
     }
 
@@ -111,7 +111,7 @@ public:
         if (size_ >= capacity_) {
             grow();
         }
-        std::construct_at(&data_[size_], std::move(value));
+        alloc_.construct(&data_[size_], std::move(value));
         ++size_;
     }
     
@@ -120,7 +120,7 @@ public:
             throw std::underflow_error("stack empty");
         }
         --size_;
-        std::destroy_at(&data_[size_]);
+        alloc_.destroy(&data_[size_]);
     }
 
     T& top() {
@@ -157,8 +157,8 @@ private:
         size_t new_capacity = capacity_ == 0 ? 8 : capacity_ * 2;
         T* new_data = alloc_.allocate(new_capacity);
         for (size_t i = 0; i < size_; ++i) {
-            std::construct_at(&new_data[i], std::move_if_noexcept(data_[i]));
-            std::destroy_at(&data_[i]);
+            alloc_.construct(&new_data[i], std::move_if_noexcept(data_[i]));
+            alloc_.destroy(&data_[i]);
         }
 
         alloc_.deallocate(data_, capacity_);
